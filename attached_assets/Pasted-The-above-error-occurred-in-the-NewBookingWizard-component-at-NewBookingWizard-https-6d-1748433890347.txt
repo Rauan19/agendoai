@@ -1,0 +1,24 @@
+The above error occurred in the <NewBookingWizard> component:
+
+    at NewBookingWizard (https://6d01e607-c724-4066-a178-3822dae23264-00-2uvgrwh3pbte1.worf.replit.dev/src/components/new-booking-wizard.tsx:34:44)
+    at div
+    at div
+    at ClientLayout (https://6d01e607-c724-4066-a178-3822dae23264-00-2uvgrwh3pbte1.worf.replit.dev/src/components/layout/client-layout.tsx:18:40)
+    at NewBookingWizardPage (https://6d01e607-c724-4066-a178-3822dae23264-00-2uvgrwh3pbte1.worf.replit.dev/src/pages/client/new-booking-wizard-page.tsx:25:35)
+    at Suspense
+    at LazyWrapper (https://6d01e607-c724-4066-a178-3822dae23264-00-2uvgrwh3pbte1.worf.replit.dev/src/App.tsx?v=iv5YCmrBkf18dfcysrq_O:191:35)
+    at component
+    at Route (https://6d01e607-c724-4066-a178-3822dae23264-00-2uvgrwh3pbte1.worf.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=72f2686f:323:16)
+    at ProtectedRoute (https://6d01e607-c724-4066-a178-3822dae23264-00-2uvgrwh3pbte1.worf.replit.dev/src/lib/protected-route.tsx:22:3)
+    at Switch (https://6d01e607-c724-4066-a178-3822dae23264-00-2uvgrwh3pbte1.worf.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=72f2686f:379:17)
+    at PresenceChild (https://6d01e607-c724-4066-a178-3822dae23264-00-2uvgrwh3pbte1.worf.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/framer-motion.js?v=72f2686f:7742:24)
+    at AnimatePresence (https://6d01e607-c724-4066-a178-3822dae23264-00-2uvgrwh3pbte1.worf.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/framer-motion.js?v=72f2686f:7800:26)
+    at RouterWithTransitions (https://6d01e607-c724-4066-a178-3822dae23264-00-2uvgrwh3pbte1.worf.replit.dev/src/App.tsx?v=iv5YCmrBkf18dfcysrq_O:209:22)
+    at div
+    at NotificationProvider (https://6d01e607-c724-4066-a178-3822dae23264-00-2uvgrwh3pbte1.worf.replit.dev/src/hooks/use-notifications.tsx:22:40)
+    at AuthProvider (https://6d01e607-c724-4066-a178-3822dae23264-00-2uvgrwh3pbte1.worf.replit.dev/src/hooks/use-auth.ts:104:32)
+    at QueryClientProvider (https://6d01e607-c724-4066-a178-3822dae23264-00-2uvgrwh3pbte1.worf.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=72f2686f:2805:3)
+    at App (https://6d01e607-c724-4066-a178-3822dae23264-00-2uvgrwh3pbte1.worf.replit.dev/src/App.tsx?v=iv5YCmrBkf18dfcysrq_O:2031:22)
+    at RootErrorBoundary (https://6d01e607-c724-4066-a178-3822dae23264-00-2uvgrwh3pbte1.worf.replit.dev/src/main.tsx?v=iv5YCmrBkf18dfcysrq_O:10:5)
+
+React will try to recreate this component tree from scratch using the error boundary you provided, RootErrorBoundary.

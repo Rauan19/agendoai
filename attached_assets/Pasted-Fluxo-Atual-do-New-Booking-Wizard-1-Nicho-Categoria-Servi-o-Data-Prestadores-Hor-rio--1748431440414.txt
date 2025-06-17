@@ -1,0 +1,67 @@
+Fluxo Atual do New Booking Wizard:
+1. Nicho → Categoria → Serviço → Data → Prestadores → Horário → Pagamento
+Etapas detalhadas:
+
+1. Seleção de Nicho
+Componente: renderNicheStep()
+API: /api/niches
+Função: Lista todos os nichos disponíveis (ex: Beleza, Automotivo, etc.)
+2. Seleção de Categoria
+Componente: renderCategoryStep()
+API: /api/categories?nicheId=${selectedNiche.id}
+Função: Lista categorias dentro do nicho escolhido
+3. Seleção de Serviço
+Componente: renderServiceStep()
+API: /api/services?categoryId=${selectedCategory.id}
+Função: Lista serviços disponíveis na categoria
+4. Seleção de Data
+Componente: renderDateStep()
+Função: Calendário para escolher data (máximo 60 dias no futuro)
+Validação: Remove datas passadas e limita período
+5. Seleção de Prestadores
+Componente: renderProvidersStep()
+API: /api/providers/service-search?serviceIds=${service.id}&date=${date}
+Filtros aplicados:
+✅ Prestadores que oferecem o serviço
+✅ Proximidade geográfica
+✅ Disponibilidade na data escolhida
+✅ Avaliações e rating
+6. Seleção de Horário
+Componente: renderTimeSlotStep()
+API: /api/providers/${providerId}/time-slots?date=${date}&duration=${duration}&serviceId=${serviceId}
+Features:
+Slots organizados por período (Manhã, Tarde, Noite)
+Considera duração personalizada do prestador
+Remove conflitos com agendamentos existentes
+Exclui horários bloqueados
+7. Pagamento e Confirmação
+Componente: renderPaymentStep()
+Opções:
+Presencial: Dinheiro, Cartão, PIX no local
+Online: Cartão de Crédito, PIX antecipado
+API: /api/appointments (POST)
+Problema Identificado:
+O erro nos logs mostra: ReferenceError: availabilities is not defined na função getAvailabilityByDate. Isso está impedindo a verificação de disponibilidade dos prestadores.
+
+Como funciona a busca de prestadores:
+Filtro por Serviço: Verifica na tabela provider_services se o prestador oferece o serviço
+Filtro por Disponibilidade:
+Consulta availabilities para horários regulares
+Verifica appointments para conflitos
+Consulta blocked_time_slots para bloqueios
+Algoritmo de Slots Livres: Calcula janelas disponíveis considerando duração total dos serviços
+Fluxo de Dados:
+Cliente → Nicho → Categoria → Serviço → Data
+    ↓
+Sistema busca prestadores que:
+- Oferecem o serviço
+- Têm disponibilidade na data
+- Estão próximos geograficamente
+    ↓
+Cliente escolhe prestador → Sistema mostra horários livres
+    ↓
+Cliente escolhe horário → Confirma pagamento → Agendamento criado
+Status Atual:
+✅ Passos 1-4: Funcionando corretamente
+❌ Passo 5: Erro na verificação de disponibilidade
+✅ Passos 6-7: Dependem da correção do passo 5

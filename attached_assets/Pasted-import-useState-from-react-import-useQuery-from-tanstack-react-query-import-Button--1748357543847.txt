@@ -1,0 +1,316 @@
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { 
+  Copy, 
+  Pencil, 
+  Plus, 
+  Search, 
+  Filter, 
+  Clock, 
+  CalendarClock, 
+  DollarSign,
+  ChevronRight,
+  PlusCircle,
+  Check
+} from "lucide-react";
+import { Link, useLocation } from "wouter";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useAuth } from "@/hooks/use-auth";
+
+export default function ProviderServicesPage() {
+  const { toast } = useToast();
+  const [_, navigate] = useLocation();
+  const [activeTab, setActiveTab] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+   const { user } = useAuth();
+  // Fetch provider services
+  const { data: services = [], isLoading } = useQuery({
+    queryKey: [`/api/provider-services/provider/${user?.id}`],
+    queryFn: async () => {
+      try {
+        const response = await fetch(`/api/provider-services/provider/${user?.id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch services');
+        }
+        return await response.json();
+      } catch (error) {
+        console.error('Error fetching services:', error);
+        return [];
+      }
+    }
+  });
+  // Filter services based on active status
+  const filteredServices = services.filter((service: any) => {
+    // Filter by search query
+    const matchesSearch = searchQuery === "" || 
+      service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      service.description?.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    // Filter by active status
+    const matchesStatus = 
+      activeTab === "all" || 
+      (activeTab === "active" && service.isActive) || 
+      (activeTab === "inactive" && !service.isActive);
+    
+    return matchesSearch && matchesStatus;
+  });
+  
+  const handleAddNewService = () => {
+    navigate("/provider/add-service");
+  };
+  
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('pt-BR', { 
+      style: 'currency', 
+      currency: 'BRL' 
+    }).format(value);
+  };
+
+  return (
+    <div className="container mx-auto py-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Meus Serviços</h1>
+        <Button onClick={handleAddNewService}>
+          <PlusCircle className="mr-2 h-4 w-4" />
+          Adicionar Serviço
+        </Button>
+      </div>
+      
+      <Card>
+        <CardHeader>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <CardTitle>Gerenciar Serviços</CardTitle>
+              <CardDescription>
+                Visualize e gerencie os serviços que você oferece aos seus clientes.
+              </CardDescription>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <div className="relative w-full sm:w-auto">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+                <Input
+                  placeholder="Buscar serviços..."
+                  className="pl-8 w-full sm:w-[250px]"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              
+              <Button 
+                variant="outline" 
+                size="icon"
+                onClick={() => setShowFilters(!showFilters)}
+              >
+                <Filter className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          
+          {showFilters && (
+            <div className="mt-4 p-4 bg-gray-50 rounded-md">
+              <h3 className="font-medium mb-2">Filtros</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {/* Filtros adicionais podem ser colocados aqui */}
+                <div>
+                  <Label htmlFor="status-filter">Status</Label>
+                  <select 
+                    id="status-filter" 
+                    className="w-full p-2 border rounded-md"
+                    value={activeTab}
+                    onChange={(e) => setActiveTab(e.target.value)}
+                  >
+                    <option value="all">Todos</option>
+                    <option value="active">Ativos</option>
+                    <option value="inactive">Inativos</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-4">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="all">Todos</TabsTrigger>
+              <TabsTrigger value="active">Ativos</TabsTrigger>
+              <TabsTrigger value="inactive">Inativos</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </CardHeader>
+        
+        <CardContent>
+          {isLoading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-primary rounded-full"></div>
+              <p className="mt-2 text-sm text-gray-500">Carregando serviços...</p>
+            </div>
+          ) : filteredServices.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="rounded-full bg-gray-100 p-3 w-12 h-12 mx-auto mb-4 flex items-center justify-center">
+                <Search className="h-6 w-6 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-medium">Nenhum serviço encontrado</h3>
+              <p className="text-sm text-gray-500 mt-1 mb-4">
+                {searchQuery 
+                  ? "Tente ajustar sua busca ou filtros" 
+                  : "Adicione seu primeiro serviço para começar a receber agendamentos"}
+              </p>
+              {!searchQuery && (
+                <Button onClick={handleAddNewService}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Adicionar Serviço
+                </Button>
+              )}
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableCaption>
+                  {filteredServices.length} serviço(s) encontrado(s)
+                </TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Nome</TableHead>
+                    <TableHead>Preço</TableHead>
+                    <TableHead>Duração</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Ações</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredServices.map((service: any) => {
+                    return (
+                    <TableRow key={service.id}>
+                      <TableCell className="font-medium">
+                        <div>
+                          {service.name}
+                          <div className="text-sm text-gray-500 truncate max-w-[200px]">
+                            {service.serviceName || "Sem descrição"}
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center">
+                          <DollarSign className="h-4 w-4 mr-1 text-gray-400" />
+                          {formatCurrency(service.price)}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center">
+                          <Clock className="h-4 w-4 mr-1 text-gray-400" />
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span>{service.duration} min</span>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <div className="text-xs">
+                                  <div>Execução: {service.executionTime} min</div>
+                                  {service.breakTime > 0 && (
+                                    <div>Intervalo: {service.breakTime} min</div>
+                                  )}
+                                </div>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={service.isActive ? "default" : "outline"}>
+                          {service.isActive ? "Ativo" : "Inativo"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem>
+                              <Pencil className="h-4 w-4 mr-2" />
+                              Editar
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Copy className="h-4 w-4 mr-2" />
+                              Duplicar
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <CalendarClock className="h-4 w-4 mr-2" />
+                              Disponibilidade
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem>
+                              {service.isActive ? (
+                                <>
+                                  <div className="h-4 w-4 mr-2 text-red-500">●</div>
+                                  Desativar
+                                </>
+                              ) : (
+                                <>
+                                  <Check className="h-4 w-4 mr-2 text-green-500" />
+                                  Ativar
+                                </>
+                              )}
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  )})}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </CardContent>
+        
+        <CardFooter className="flex justify-between">
+          <div className="text-sm text-gray-500">
+            <span className="font-medium">{filteredServices.length}</span> de {services.length} serviços
+          </div>
+          
+          <Link href="/provider/add-service">
+            <Button variant="outline" className="text-sm flex items-center">
+              Adicionar Novo Serviço
+              <ChevronRight className="ml-1 h-4 w-4" />
+            </Button>
+          </Link>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}

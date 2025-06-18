@@ -1,14 +1,15 @@
 import { defineConfig } from 'drizzle-kit';
 import dotenv from 'dotenv';
 
-dotenv.config();
+// Load environment variables from the root directory
+dotenv.config({ path: '../.env' });
 
 export default defineConfig({
   schema: './db/schema.js',
   out: './migrations',
   dialect: 'postgresql',
   dbCredentials: {
-    connectionString: process.env.DATABASE_URL,
+    url: process.env.DATABASE_URL,
   },
   verbose: true,
   strict: true,

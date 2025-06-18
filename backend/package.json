@@ -1,16 +1,21 @@
 {
   "name": "agendo-ai-backend",
   "version": "1.0.0",
-  "description": "Backend API for AgendoAI scheduling application",
+  "description": "Backend API for AgendoAI scheduling application with PostgreSQL",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "mongoose": "^8.0.0",
+    "pg": "^8.11.3",
+    "drizzle-orm": "^0.28.6",
+    "drizzle-zod": "^0.5.1",
     "dotenv": "^16.3.1",
     "cors": "^2.8.5",
     "bcryptjs": "^2.4.3",
@@ -19,17 +24,21 @@
     "multer": "^1.4.5-lts.1",
     "helmet": "^7.1.0",
     "express-rate-limit": "^7.1.5",
-    "compression": "^1.7.4"
+    "compression": "^1.7.4",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "drizzle-kit": "^0.19.13",
+    "@types/pg": "^8.10.7"
   },
   "keywords": [
     "scheduling",
     "appointment",
     "booking",
     "api",
-    "rest"
+    "rest",
+    "postgresql"
   ],
   "author": "",
   "license": "ISC"

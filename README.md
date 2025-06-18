@@ -1,6 +1,6 @@
 # 🚀 AgendoAI - Sistema de Agendamento Inteligente
 
-Sistema completo de agendamento com IA, separado em backend Node.js/Express com MongoDB e frontend React.
+Sistema completo de agendamento com IA, totalmente separado em backend Node.js/Express com PostgreSQL e frontend React independente.
 
 ## 📋 Visão Geral
 

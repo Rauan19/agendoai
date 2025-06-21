@@ -28,10 +28,15 @@ const router = Router();
 
 // Middleware para verificar se é admin
 const isAdmin = (req: any, res: any, next: any) => {
-  if (req.user?.userType === "admin") {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ error: "Usuário não autenticado" });
+  }
+  
+  const user = req.user;
+  if (user?.userType === "admin" || user?.role === "admin") {
     return next();
   }
-  return res.status(403).json({ error: "Acesso negado" });
+  return res.status(403).json({ error: "Acesso negado - requer permissão de administrador" });
 };
 
 /**
@@ -151,10 +156,10 @@ router.get("/new-users-by-day", isAdmin, async (req, res) => {
       SELECT 
         DATE(created_at) as date,
         COUNT(*) as count,
-        SUM(CASE WHEN user_type = 'client' THEN 1 ELSE 0 END) as clients,
-        SUM(CASE WHEN user_type = 'provider' THEN 1 ELSE 0 END) as providers
+        SUM(CASE WHEN role = 'client' THEN 1 ELSE 0 END) as clients,
+        SUM(CASE WHEN role = 'provider' THEN 1 ELSE 0 END) as providers
       FROM users 
-      WHERE created_at >= CURRENT_DATE - INTERVAL '${sql.raw(days.toString())} days'
+      WHERE created_at >= CURRENT_DATE - INTERVAL ${days} day
       GROUP BY DATE(created_at)
       ORDER BY date DESC
     `).catch((error) => {

@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import { isAdmin } from "../middleware/auth";
 import { storage } from "../storage";
 import { z } from "zod";
-import { insertProviderServiceFeeSchema } from "../../shared/schema";
+import { insertProviderServiceFeeSchema } from "../shared/schema.ts";
 
 const router = express.Router();
 

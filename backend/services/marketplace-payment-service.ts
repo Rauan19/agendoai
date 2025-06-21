@@ -16,7 +16,7 @@ import {
   InsertProviderTransaction,
   PaymentWithdrawal,
   InsertPaymentWithdrawal
-} from '@shared/schema';
+} from '../shared/schema.js';
 
 // Constantes
 const SUMUP_API_BASE_URL = 'https://api.sumup.com/v0.1';
@@ -99,7 +99,7 @@ export function initializeMarketplaceService(merchantCode?: string, feePercent?:
 async function loadCategoryFees() {
   try {
     const db = await import('../db').then(module => module.db);
-    const { systemSettings } = await import('@shared/schema');
+    const { systemSettings } = await import('../shared/schema.js');
     const { eq } = await import('drizzle-orm');
     
     const [categoriesConfig] = await db
@@ -153,7 +153,7 @@ export function getCategoryFee(categoryId: number): number {
 export async function saveCategoryFees(): Promise<boolean> {
   try {
     const db = await import('../db').then(module => module.db);
-    const { systemSettings } = await import('@shared/schema');
+    const { systemSettings } = await import('../shared/schema.js');
     const { eq } = await import('drizzle-orm');
     
     const feesObject: Record<number, number> = {};

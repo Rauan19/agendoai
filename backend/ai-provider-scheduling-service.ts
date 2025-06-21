@@ -7,7 +7,7 @@
  */
 
 import { db } from "./db";
-import { appointments, users, providerSettings, providerServices, services, availability, reviews, categories } from "@shared/schema";
+import { appointments, users, providerSettings, providerServices, services, availability, reviews, categories } from "../shared/schema.ts";
 import { storage } from "./storage";
 import { eq, and, gte, lte, desc, sql, like, count, sum, avg, isNull, isNotNull } from "drizzle-orm";
 import { createLogger } from "./logger";

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { z } from "zod";
 import { db } from "../db";
 import { eq, and, desc, asc, isNull, like, sql } from "drizzle-orm";
-import { users, supportTickets, supportMessages, insertSupportTicketSchema, insertSupportMessageSchema } from "@shared/schema";
+import { users, supportTickets, supportMessages, insertSupportTicketSchema, insertSupportMessageSchema } from "../shared/schema.ts";
 // Middleware para verificação de admin
 const adminGuard = (req: any, res: any, next: any) => {
   if (req.user && req.user.userType === 'admin') {

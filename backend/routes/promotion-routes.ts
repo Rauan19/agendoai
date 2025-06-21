@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { storage } from "../storage";
-import { insertPromotionSchema } from "@shared/schema";
+import { insertPromotionSchema } from "../shared/schema.ts";
 import { and, eq, gte, lte, isNull, or } from "drizzle-orm";
 import { z } from "zod";
 

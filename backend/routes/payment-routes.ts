@@ -14,10 +14,10 @@ if (!process.env.STRIPE_SECRET_KEY) {
   console.error('ERRO: Chave secreta do Stripe não configurada (STRIPE_SECRET_KEY)');
 }
 
-// Inicializa o cliente Stripe com a chave secreta
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+// Inicializa o cliente Stripe apenas se a chave estiver configurada
+const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2025-04-30.basil" as any,
-});
+}) : null;
 
 export const paymentRouter = Router();
 

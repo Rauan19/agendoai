@@ -2,7 +2,7 @@ import { Pool, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 import { eq, and, or, sql } from 'drizzle-orm';
 import ws from "ws";
-import * as schema from "@shared/schema.ts";
+import * as schema from "../shared/schema.ts";
 
 // Configuração para o Neon Database usando WebSockets
 neonConfig.webSocketConstructor = ws;

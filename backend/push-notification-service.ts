@@ -8,7 +8,7 @@
 import webpush from 'web-push';
 import { createLogger } from './logger';
 import { db } from './db';
-import { systemSettings } from '@shared/schema';
+import { systemSettings } from '../shared/schema.js';
 import { eq } from 'drizzle-orm';
 
 // Inicialização do logger

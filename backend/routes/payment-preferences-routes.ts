@@ -6,7 +6,7 @@ import {
   clientPaymentPreferences,
   insertProviderPaymentPreferenceSchema,
   insertClientPaymentPreferenceSchema
-} from "@shared/schema";
+} from "../shared/schema.ts";
 // Middleware para verificar se o usuário está autenticado
 const isAuthenticated = (req: any, res: any, next: any) => {
   if (req.isAuthenticated()) {

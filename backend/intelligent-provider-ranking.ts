@@ -1,6 +1,6 @@
 // Serviço para ranqueamento inteligente de prestadores baseado em avaliações e disponibilidade
 import { storage } from "./storage";
-import { Appointment, User, Review, Service } from "@shared/schema";
+import { Appointment, User, Review, Service } from "../shared/schema.ts";
 import { addDays, format, isAfter, isBefore, parseISO, startOfDay } from "date-fns";
 
 // Interface TimeSlot para representar slots de tempo

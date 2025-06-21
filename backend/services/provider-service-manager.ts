@@ -8,7 +8,7 @@
 import { storage } from '../storage';
 import { db } from '../db';
 import { sql } from 'drizzle-orm';
-import { Service, ProviderService, Niche, Category } from '@shared/schema';
+import { Service, ProviderService, Niche, Category } from '../shared/schema.js';
 
 // Tipos para os serviços enriquecidos
 interface EnrichedProviderService {

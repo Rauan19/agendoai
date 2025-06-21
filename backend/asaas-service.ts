@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { db } from './db';
-import { appointments, paymentSettings, userPaymentMethods } from '@shared/schema';
+import { appointments, paymentSettings, userPaymentMethods } from '../shared/schema.js';
 import { eq } from 'drizzle-orm';
 
 // Configurações do cliente Asaas

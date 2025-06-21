@@ -15,7 +15,7 @@ import {
   categories,
   niches,
   reviews
-} from "@shared/schema";
+} from "../shared/schema.ts";
 import { eq, and, gte, lt, desc, sql, or, between, like } from "drizzle-orm";
 import { createLogger } from "./logger";
 import { storage } from "./storage";

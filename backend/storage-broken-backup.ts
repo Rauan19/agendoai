@@ -73,7 +73,7 @@ import {
         services,
         User,
         users,
-} from "../shared/schema";
+} from "../shared/schema.ts";
 
 // Session import
 import session from "express-session";

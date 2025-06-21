@@ -1,6 +1,6 @@
 import { Express } from "express";
 import { db } from "../db";
-import { systemSettings } from "@shared/schema";
+import { systemSettings } from "../shared/schema.ts";
 import { eq } from "drizzle-orm";
 import webpush from "web-push";
 import { pushService } from "../push-notification-service";

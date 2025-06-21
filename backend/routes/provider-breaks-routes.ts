@@ -2,7 +2,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { storage } from "../storage";
 import { z } from "zod";
-import { ProviderBreak, insertProviderBreakSchema } from "@shared/schema";
+import { ProviderBreak, insertProviderBreakSchema } from "../shared/schema.ts";
 
 // Middleware para verificar se o usuário está autenticado
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {

@@ -11,7 +11,7 @@ import { storage } from "../storage";
 import {
   insertProviderServiceSchema,
   type ProviderService,
-} from "../../shared/schema.ts";
+} from "../shared/schema.ts";
 import { db } from "../db";
 import { sql } from "drizzle-orm";
 import {

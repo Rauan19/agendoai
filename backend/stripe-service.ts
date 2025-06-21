@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import { db } from './db';
-import { appointments, paymentSettings, userPaymentMethods, UserPaymentMethod, InsertUserPaymentMethod } from '@shared/schema';
+import { appointments, paymentSettings, userPaymentMethods, UserPaymentMethod, InsertUserPaymentMethod } from '../shared/schema.js';
 import { eq } from 'drizzle-orm';
 
 let stripeClient: Stripe | null = null;

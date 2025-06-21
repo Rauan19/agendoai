@@ -14,7 +14,7 @@ import { paymentRouter } from "./routes/payment-routes"
 import { adminRouter } from "./routes/index"
 import adminFinancialRoutes from "./routes/admin-financial-routes"
 import { db } from "./db"
-import { users, supportTickets, supportMessages } from "@shared/schema.ts"
+import { users, supportTickets, supportMessages } from "../shared/schema.ts"
 // Marketplace removido conforme solicitado
 
 // Inicializar Stripe
@@ -39,8 +39,7 @@ import {
         insertAppointmentSchema,
         insertNicheSchema,
         insertCategorySchema,
-        insertUserAddressSchema,
-} from "@shared/schema"
+} from "../shared/schema.ts"
 import WebSocket, { WebSocketServer } from "ws"
 import { z } from "zod"
 import { pushRouter } from "./routes/push-notification-routes"
@@ -8819,7 +8818,17 @@ export function registerRoutes(app: Express): Server {
                                 userId,
                         }
 
-                        const insertSchema = insertUserAddressSchema.extend({
+                        const insertSchema = z.object({
+                                userId: z.number(),
+                                street: z.string().min(1, "Rua é obrigatória"),
+                                number: z.string().min(1, "Número é obrigatório"),
+                                neighborhood: z.string().min(1, "Bairro é obrigatório"),
+                                city: z.string().min(1, "Cidade é obrigatória"),
+                                state: z.string().min(1, "Estado é obrigatório"),
+                                zipCode: z.string().min(1, "CEP é obrigatório"),
+                                complement: z.string().optional(),
+                                country: z.string().default("Brazil"),
+                                isDefault: z.boolean().default(false),
                                 type: z.enum(["home", "work", "other"]),
                                 name: z.string().min(1, "Nome é obrigatório"),
                                 street: z.string().min(1, "Rua é obrigatória"),

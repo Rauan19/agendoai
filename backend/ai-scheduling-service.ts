@@ -7,7 +7,7 @@
  */
 
 import { db } from "./db";
-import { appointments, users, providerSettings, reviews } from "@shared/schema";
+import { appointments, users, providerSettings, reviews } from "../shared/schema.ts";
 import { eq, and, gte, lte, desc, sql } from "drizzle-orm";
 import { createLogger } from "./logger";
 import { anthropicService } from "./anthropic-service";

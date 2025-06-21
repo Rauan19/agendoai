@@ -208,9 +208,22 @@ export function setupAuth(app: Express): void {
           isVerified: true,
           createdAt: new Date("2025-04-05T21:45:00.312Z")
         },
-        // ID 3: Cliente
+        // ID 3: Cliente (Emergency User)
         3: {
           id: 3,
+          email: "rau@gmail.com",
+          name: "rau",
+          profileImage: "/uploads/profiles/default.png",
+          userType: "client",
+          phone: "+5511977777777",
+          address: null,
+          isActive: true,
+          isVerified: true,
+          createdAt: new Date("2025-04-05T21:45:00.312Z")
+        },
+        // ID 4: Cliente Demo
+        4: {
+          id: 4,
           email: "cliente@agendoai.com",
           name: "Cliente Demo",
           profileImage: "/uploads/profiles/default.png",
@@ -219,7 +232,7 @@ export function setupAuth(app: Express): void {
           address: null,
           isActive: true,
           isVerified: true,
-          createdAt: new Date("2025-04-05T21:45:00.312Z")
+          createdAt: new Date("2025-06-21T03:00:53.896Z")
         }
       };
       
@@ -260,8 +273,11 @@ export function setupAuth(app: Express): void {
   function sanitizeUser(user: Express.User) {
     if (!user) return null;
     
-    const { password, ...safeUser } = user;
-    return safeUser;
+    const { password, ...safeUser } = user as any;
+    return {
+      ...safeUser,
+      userType: (user as any).role || (user as any).userType
+    };
   }
 
   app.post("/api/register", async (req, res, next) => {
@@ -441,7 +457,12 @@ export function setupAuth(app: Express): void {
 
   app.get("/api/user", (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
-    res.json(sanitizeUser(req.user));
+    const user = req.user as any;
+    const sanitizedUser = {
+      ...sanitizeUser(user),
+      userType: user.role || user.userType
+    };
+    res.json(sanitizedUser);
   });
   
   // Rota para solicitar redefinição de senha

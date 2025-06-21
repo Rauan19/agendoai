@@ -5,11 +5,13 @@ import { z } from 'zod';
 // Users table
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
-  email: text('email').notNull().unique(),
-  name: text('name'),
-  phone: text('phone'),
-  password: text('password'),
-  role: text('role').default('client'),
+  name: varchar('name', { length: 255 }).notNull(),
+  email: varchar('email', { length: 255 }).notNull().unique(),
+  password: varchar('password', { length: 255 }).notNull(),
+  role: varchar('role', { length: 50 }).notNull(),
+  phone: varchar('phone', { length: 20 }),
+  avatar: text('avatar'),
+  isActive: boolean('is_active').default(true),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });

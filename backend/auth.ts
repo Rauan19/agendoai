@@ -320,8 +320,11 @@ export function setupAuth(app: Express): void {
         if (isProvider) {
           // Primeiro criar o usuário
           user = await storage.createUser({
-            ...req.body,
+            name: req.body.name,
+            email: req.body.email,
             password: hashedPassword,
+            userType: req.body.userType,
+            phone: req.body.phone
           });
           
           console.log(`Usuário prestador criado com ID: ${user.id}`);

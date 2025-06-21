@@ -2,8 +2,7 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Express, Request, Response, NextFunction } from "express";
 import session from "express-session";
-import { scrypt, randomBytes, timingSafeEqual } from "crypto";
-import { promisify } from "util";
+import bcrypt from 'bcrypt';
 import { storage } from "./storage";
 import { User as SelectUser } from "../shared/schema.ts";
 
@@ -13,39 +12,22 @@ declare global {
   }
 }
 
-const scryptAsync = promisify(scrypt);
-
 /**
- * Gera hash de senha usando scrypt
+ * Gera hash de senha usando bcrypt
  */
 export async function hashPassword(password: string): Promise<string> {
-  const salt = randomBytes(16).toString("hex");
-  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
-  return `${buf.toString("hex")}.${salt}`;
+  return await bcrypt.hash(password, 10);
 }
 
 /**
- * Compara senha fornecida com hash armazenado
+ * Compara senha fornecida com hash armazenado usando bcrypt
  */
 export async function comparePasswords(
   suppliedPassword: string,
   storedHash: string
 ): Promise<boolean> {
-  if (!storedHash.includes(".")) {
-    console.warn("Invalid hash format - missing salt separator");
-    return false;
-  }
-
   try {
-    const [hashedPassword, salt] = storedHash.split(".");
-    const hashedBuf = Buffer.from(hashedPassword, "hex");
-    const suppliedBuf = (await scryptAsync(
-      suppliedPassword,
-      salt,
-      64
-    )) as Buffer;
-
-    return timingSafeEqual(hashedBuf, suppliedBuf);
+    return await bcrypt.compare(suppliedPassword, storedHash);
   } catch (error) {
     console.error("Error comparing passwords:", error);
     return false;
